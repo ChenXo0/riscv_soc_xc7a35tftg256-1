@@ -16,6 +16,7 @@ git clone https://github.com/ultraembedded/riscv_soc.git --recursive
 | ------------------- | --------------------------------------------------- |
 | core                | RISC-V core (http://github.com/ultraembedded/riscv) |
 | fpga/arty           | Digilent Artix-7 Arty FPGA Dev Board project        |
+| fpga/xc7a35t        | XC7A35T FTG256 board port with JTAG console support |
 | soc                 | Verilog for peripherals, interconnect, etc          |
 | tb                  | System-C testbench for the project                  |
 
@@ -174,6 +175,20 @@ BusyBox v1.29.3 (2018-11-13 23:09:48 GMT) built-in shell (ash)
 bin   dev   etc   init  lib   mnt   proc  sbin  sys   test
 # 
 ```
+
+An additional XC7A35T FTG256 board port is available under `fpga/xc7a35t/`.
+
+Current XC7A35T port highlights:
+
+- DDR3-backed 50MHz Linux boot path
+- JTAG-only bring-up flow
+- JTAG console support without an external UART cable
+- Persistent Vivado session helper for running Linux shell commands over JTAG
+
+See:
+
+- `fpga/xc7a35t/README.md`
+- `fpga/xc7a35t/JTAG_LINUX_CURRENT_FLOW.md`
 
 ## Size
 
@@ -485,4 +500,3 @@ bin   dev   etc   init  lib   mnt   proc  sbin  sys   test
 | Bits | Name | Description    |
 | ---- | ---- | -------------- |
 | 31:0 | EDGE | GPIO Interrupt Mode - 1 = edge triggered, 0 = level |
-
