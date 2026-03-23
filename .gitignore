@@ -1,0 +1,10 @@
+fpga/xc7a35t/__pycache__/
+fpga/xc7a35t/run/__pycache__/
+fpga/xc7a35t/build/
+fpga/xc7a35t/backup_50m_20260322/
+fpga/xc7a35t/sw/uart_hello.elf
+fpga/xc7a35t/sw/uart_hello.bin
+fpga/xc7a35t/sw/uart_hello.map
+fpga/xc7a35t/sw/uart_hello.mem
+fpga/xc7a35t/sw/uart_hello_jtag.mem
+fpga/xc7a35t/sw/uart_hello_mem.vh
