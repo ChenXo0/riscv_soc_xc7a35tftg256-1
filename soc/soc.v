@@ -109,6 +109,8 @@ module soc
     ,input           cpu_d_rready_i
     ,input           spi_miso_i
     ,input           uart_txd_i
+    ,input           uart_rx_inject_valid_i
+    ,input  [  7:0]  uart_rx_inject_data_i
     ,input  [ 31:0]  gpio_input_i
 
     // Outputs
@@ -166,6 +168,9 @@ module soc
     ,output          spi_mosi_o
     ,output          spi_cs_o
     ,output          uart_rxd_o
+    ,output          uart_tx_wr_o
+    ,output [  7:0]  uart_tx_data_o
+    ,output          uart_rx_inject_ready_o
     ,output [ 31:0]  gpio_output_o
     ,output [ 31:0]  gpio_output_enable_o
 );
@@ -361,6 +366,8 @@ uart_lite u_uart
     ,.cfg_arvalid_i(axi_tap_output2_arvalid_w)
     ,.cfg_araddr_i(axi_tap_output2_araddr_w)
     ,.cfg_rready_i(axi_tap_output2_rready_w)
+    ,.inject_rx_valid_i(uart_rx_inject_valid_i)
+    ,.inject_rx_data_i(uart_rx_inject_data_i)
     ,.rx_i(uart_txd_i)
 
     // Outputs
@@ -373,6 +380,9 @@ uart_lite u_uart
     ,.cfg_rdata_o(axi_tap_output2_rdata_w)
     ,.cfg_rresp_o(axi_tap_output2_rresp_w)
     ,.tx_o(uart_rxd_o)
+    ,.tx_wr_o(uart_tx_wr_o)
+    ,.tx_data_o(uart_tx_data_o)
+    ,.inject_rx_ready_o(uart_rx_inject_ready_o)
     ,.intr_o(interrupt1_w)
 );
 

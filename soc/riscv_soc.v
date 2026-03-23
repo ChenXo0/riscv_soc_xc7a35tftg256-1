@@ -61,6 +61,8 @@ module riscv_soc
     ,input           rst_cpu_i
     ,input           spi_miso_i
     ,input           uart_txd_i
+    ,input           debug_uart_rx_inject_valid_i
+    ,input  [  7:0]  debug_uart_rx_inject_data_i
     ,input  [ 31:0]  gpio_input_i
     ,input           mem_awready_i
     ,input           mem_wready_i
@@ -87,6 +89,9 @@ module riscv_soc
     ,output          spi_mosi_o
     ,output          spi_cs_o
     ,output          uart_rxd_o
+    ,output          debug_uart_tx_wr_o
+    ,output [  7:0]  debug_uart_tx_data_o
+    ,output          debug_uart_rx_inject_ready_o
     ,output [ 31:0]  gpio_output_o
     ,output [ 31:0]  gpio_output_enable_o
     ,output          mem_awvalid_o
@@ -105,6 +110,11 @@ module riscv_soc
     ,output [  7:0]  mem_arlen_o
     ,output [  1:0]  mem_arburst_o
     ,output          mem_rready_o
+    ,output [ 31:0]  debug_if_pc_o
+    ,output          debug_if_rd_o
+    ,output [ 31:0]  debug_d_addr_o
+    ,output          debug_d_rd_o
+    ,output [  3:0]  debug_d_wr_o
 );
 
 wire  [  3:0]  axi4_conv_bid_w;
@@ -308,6 +318,11 @@ riscv_top u_core
     ,.axi_d_arlen_o(axi4_d_arlen_w)
     ,.axi_d_arburst_o(axi4_d_arburst_w)
     ,.axi_d_rready_o(axi4_d_rready_w)
+    ,.debug_if_pc_o(debug_if_pc_o)
+    ,.debug_if_rd_o(debug_if_rd_o)
+    ,.debug_d_addr_o(debug_d_addr_o)
+    ,.debug_d_rd_o(debug_d_rd_o)
+    ,.debug_d_wr_o(debug_d_wr_o)
 );
 
 
@@ -377,6 +392,8 @@ soc u_soc
     ,.cpu_d_rready_i(axi4_d_rready_w)
     ,.spi_miso_i(spi_miso_i)
     ,.uart_txd_i(uart_txd_i)
+    ,.uart_rx_inject_valid_i(debug_uart_rx_inject_valid_i)
+    ,.uart_rx_inject_data_i(debug_uart_rx_inject_data_i)
     ,.gpio_input_i(gpio_input_i)
 
     // Outputs
@@ -434,6 +451,9 @@ soc u_soc
     ,.spi_mosi_o(spi_mosi_o)
     ,.spi_cs_o(spi_cs_o)
     ,.uart_rxd_o(uart_rxd_o)
+    ,.uart_tx_wr_o(debug_uart_tx_wr_o)
+    ,.uart_tx_data_o(debug_uart_tx_data_o)
+    ,.uart_rx_inject_ready_o(debug_uart_rx_inject_ready_o)
     ,.gpio_output_o(gpio_output_o)
     ,.gpio_output_enable_o(gpio_output_enable_o)
 );

@@ -106,6 +106,11 @@ module riscv_top
     ,output [  7:0]  axi_d_arlen_o
     ,output [  1:0]  axi_d_arburst_o
     ,output          axi_d_rready_o
+    ,output [ 31:0]  debug_if_pc_o
+    ,output          debug_if_rd_o
+    ,output [ 31:0]  debug_d_addr_o
+    ,output          debug_d_rd_o
+    ,output [  3:0]  debug_d_wr_o
 );
 
 wire           dport_bridge_accept_w;
@@ -258,6 +263,12 @@ icache u_icache
     ,.axi_arburst_o(axi_i_arburst_o)
     ,.axi_rready_o(axi_i_rready_o)
 );
+
+assign debug_if_pc_o   = icache_pc_w;
+assign debug_if_rd_o   = icache_rd_w;
+assign debug_d_addr_o  = dport_bridge_addr_w;
+assign debug_d_rd_o    = dport_bridge_rd_w;
+assign debug_d_wr_o    = dport_bridge_wr_w;
 
 
 

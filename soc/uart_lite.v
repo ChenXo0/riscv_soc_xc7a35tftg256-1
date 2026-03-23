@@ -62,6 +62,8 @@ module uart_lite
     ,input          cfg_arvalid_i
     ,input  [31:0]  cfg_araddr_i
     ,input          cfg_rready_i
+    ,input          inject_rx_valid_i
+    ,input  [7:0]   inject_rx_data_i
     ,input          rx_i
 
     // Outputs
@@ -74,6 +76,9 @@ module uart_lite
     ,output [31:0]  cfg_rdata_o
     ,output [1:0]   cfg_rresp_o
     ,output         tx_o
+    ,output         tx_wr_o
+    ,output [7:0]   tx_data_o
+    ,output         inject_rx_ready_o
     ,output         intr_o
 );
 
@@ -326,6 +331,7 @@ reg          rx_ready_q;
 reg          rx_busy_q;
 
 reg          rx_err_q;
+wire         inject_rx_ready_w = ~rx_ready_q & ~rx_busy_q;
 
 //-----------------------------------------------------------------
 // Re-sync RXD
@@ -440,7 +446,13 @@ begin
        rx_err_q   <= 1'b0;
    end
 
-   if (rx_busy_q && rx_sample_w)
+   if (inject_rx_valid_i && inject_rx_ready_w)
+   begin
+       rx_ready_q <= 1'b1;
+       rx_data_q  <= inject_rx_data_i;
+       rx_err_q   <= 1'b0;
+   end
+   else if (rx_busy_q && rx_sample_w)
    begin
        // Stop bit
        if ((rx_bits_q == STOP_BIT1 && STOP_BITS) || (rx_bits_q == STOP_BIT0 && !STOP_BITS))
@@ -575,6 +587,9 @@ else
     txd_q <= txd_r;
 
 assign tx_o = txd_q;
+assign tx_wr_o = ulite_tx_wr_req_w & ~tx_busy_q;
+assign tx_data_o = ulite_tx_data_out_w;
+assign inject_rx_ready_o = inject_rx_ready_w;
 
 //-----------------------------------------------------------------
 // Interrupt
